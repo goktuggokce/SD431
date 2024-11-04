@@ -1,0 +1,235 @@
+
+<html lang="en">
+<head>
+	<title>Eliza</title>
+	<script language="JavaScript" type="text/javascript" src="termlib.js"></script>
+	<script language="JavaScript" type="text/javascript" src="elizabot.js"></script>
+	<script language="JavaScript" type="text/javascript" src="elizadata.js"></script>
+
+<script language="JavaScript" type="text/javascript">
+<!--
+
+var conf= {
+	x:0,
+	y:0,
+	id: 1,
+	termDiv:'elizaDiv',
+	frameColor: '#77777a',
+	ps: 'YOU:  ',
+	historyUnique: true,
+	initHandler: initHandler,
+	exitHandler: termExit,
+	handler: termHandler
+}
+
+var term = new Terminal(conf);
+var eliza = new ElizaBot();
+
+function termOpen() {
+	TermGlobals.keylock=false;
+	if (term.closed) eliza.reset();
+	term.open();
+	setTermLink(false);
+}
+
+function setTermLink(v) {
+	var linkobj;
+	if (document.getElementById) {
+		linkobj=document.getElementById('termOpenLink');
+	}
+	else if (document.all) {
+		linkobj=document.all.termOpenLink;
+	}
+	else {
+		linkobj=document.links.termOpenLink;
+	}
+	if (linkobj) linkobj.className = (v)? 'termopen': 'termopenhidden';
+}
+
+function initHandler() {
+	this.write( [
+		'  Welcome to',
+		'                    EEEEEE  LL      IIII  ZZZZZZZ   AAAAA ',
+		'                    EE      LL       II       ZZ   AA   AA',
+		'                    EEEEE   LL       II     ZZZ    AAAAAAA',
+		'                    EE      LL       II    ZZ      AA   AA',
+		'                    EEEEEE  LLLLLL  IIII  ZZZZZZZ  AA   AA',
+		' ',
+		'  Eliza is a mock Rogerian psychotherapist.',
+		'  The original program was described by Joseph Weizenbaum in 1966.',
+		'  This implementation by Norbert Landsteiner 2005.',
+		'%n%n'
+		]);
+	this.type('ELIZA: '+elizaInitials[Math.floor(Math.random()*elizaInitials.length)]);
+	this.prompt();
+}
+
+function termHandler() {
+	var line=this.lineBuffer;
+	// no action on empty line
+	if (line.search(/^\s*$/)==0) {
+		this.prompt();
+		return;
+	}
+	// transform
+	this.write('%nELIZA: '+eliza.transform(line));
+	if (eliza.quit) {
+		setTimeout('term.close()',2500);
+		return;
+	}
+	this.prompt();
+}
+
+function termExit() {
+	TermGlobals.keylock=true;
+	setTermLink(true);
+}
+
+//-->
+</script>
+
+<style type="text/css">
+body {
+	background-color: #253850;
+	margin: 12px 20px;
+}
+body,p,a {
+	font-family: courier,fixed,monospace;
+	font-size: 12px;
+	color: #ffffff;
+}
+a,a:link,a:visited {
+	text-decoration: none;
+	color: #77dd11;
+}
+a:hover {
+	text-decoration: underline;
+	color: #77dd11;
+}
+a:active {
+	text-decoration: underline;
+	color: #dddddd;
+}
+
+h1 {
+	font-family: courier,fixed,monospace;
+	font-size: 18px;
+	color: #ffffff;
+	text-align: center;
+}
+
+#display { margin: 2em 0 1em 0; }
+#elizaDiv { min-height: 370px; }
+#about
+{
+	width: 580px;
+	max-width: 100%;
+	margin: 2em auto 0 auto;
+	line-height: 13px;
+}
+
+.term {
+	font-family: courier,fixed,monspace;
+	font-size: 12px;
+	color: #aaccaa;
+	background: none;
+}
+
+.termReverse {
+	font-family: courier,fixed,monspace;
+	font-size: 12px;
+	color: #111111;
+	background: #aaccaa;
+}
+
+grey,.grey {
+	font-family: courier,fixed,monspace;
+	font-size: 12px;
+	color: #999999;
+}
+
+a.termopen,a.termopen:link,a.termopen:visited {
+	text-decoration: none;
+	color: #77dd11;
+	background: none;
+}
+a.termopen:hover {
+	text-decoration: none;
+	color: #222222;
+	background: #77dd11;
+}
+a.termopen:active {
+	text-decoration: none;
+	color: #222222;
+	background: #dddddd;
+}
+
+a.termopenhidden,a.termopenhidden:link,a.termopenhidden:visited {
+	text-decoration: none;
+	color: #253850;
+	background: none;
+}
+a.termopenhidden:hover {
+	text-decoration: none;
+	color: #222222;
+	background: #77dd11;
+}
+a.termopenhidden:active {
+	text-decoration: none;
+	color: #222222;
+	background: #dddddd;
+}
+
+p.marginabove { margin-top: 2.5em; }
+dl { display: block; }
+dt { vertical-align: top; float: left; }
+dd { margin-left: 2.25em; vertical-align: top; }
+dd:after { content: ""; clear: both; display: table; }
+p[rel="author"] { margin: 3em 0 0 0; }
+
+del {
+	color: #dde;
+	text-decoration: line-through;
+	-moz-text-decoration-color: #fff;
+	-webkit-text-decoration-color: #fff;
+	text-decoration-color: #fff;
+}
+
+</style>
+</head>
+
+<body>
+
+	<h1>ELIZA Terminal</h1>
+	<div id="display" align="center">
+		<a href="javascript:termOpen();" onfocus="if(this.blur)this.blur();" title="open terminal&hellip;" class="termopen" id="termOpenLink">&gt; open ELIZA terminal&nbsp;</a>
+		<div id="elizaDiv" style="position:relative;"></div>
+	</div>
+
+	<div id="about">
+		<p>This page is a sample for <a href="http://www.masswerk.at/termlib/">mass:werk termlib.js</a> and the ELIZA library <a href="http://www.masswerk.at/elizabot/">elizabot.js</a>.</p>
+
+		<p>For a chat with two Eliza therapists see the <a href="eliza_chat.html">ELIZA-Chat</a>.</p>
+
+		<p>ELIZA is a natural language conversation program described by Joseph Weizenbaum in January 1966 <a href="#ELIZA">[1]</a>.
+		It features the dialog between a human user and a computer program representing a mock Rogerian psychotherapist.</p>
+
+		<p class="marginabove">Compatibility:</p>
+		<p>This page uses JavaScript and DHTML and should be compatible with most standard web browsers.<br />
+		<del datetime="2019-06-27">Please note that khtml (Konqueror) currently does not handle any keyboard events.</del></p>
+		<p class="marginabove">References:</p>
+		<dl>
+			<dt id="ELIZA">[1]</td>
+			<dd>
+				Weizenbaum, Joseph &quot;ELIZA &#150; A Computer Program For the Study of Natural Language
+				Communication Between Man and Machine&quot;<br />
+				in: Communications of the ACM; Volume 9 , Issue 1 (January 1966): p 36-45.
+			</dd>
+		</dl>
+
+		<p rel="author">N. Landsteiner 2005; &lt;<a href="http://www.masswerk.at/" target="_blank">http://www.masswerk.at</a>&gt;</p>
+		<!-- modernized markup N.L. June 2019 -->
+	</div>
+
+</body>
+</html>
