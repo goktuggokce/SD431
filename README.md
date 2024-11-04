@@ -8,3 +8,6 @@ Afyon Kocatepe Üniversitesi, Mühendislik Fakültesi, Bilgisayar Mühendisliği
 -  212923001 | [Aslı Şemşimoğlu](https://www.linkedin.com/in/aslisemsimoglu)  
 -  212923008 | [Sinan Malak](https://www.linkedin.com/in/sinanmalak)  
 -  212923009 | [Bilgehan Bayrak](https://www.linkedin.com/in/bilgehan-bayrak-b9a733225/)  
+
+## Eliza
+Eliza test dosyası için eliza.html'nin dosya içerisinde açılması yeterlidir.
